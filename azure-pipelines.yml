@@ -7,6 +7,8 @@ pool:
 variables:
   buildConfiguration: 'Release'
   solution: 'Prog8860Lab4/Prog8860Lab4.sln'
+  artifactName: 'drop'
+  artifactPath: '$(Build.ArtifactStagingDirectory)/build_output.zip'
 
 stages:
 - stage: Build
@@ -27,12 +29,12 @@ stages:
         rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
         includeRootFolder: false
         archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/build_output.zip'
+        archiveFile: '$(artifactPath)'
         replaceExistingArchive: true
     - task: PublishBuildArtifacts@1
       inputs:
-        pathToPublish: '$(Build.ArtifactStagingDirectory)/build_output.zip'
-        artifactName: 'drop'
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: '$(artifactName)'
         publishLocation: 'Container'
 
 - stage: Test
@@ -65,11 +67,11 @@ stages:
       inputs:
         buildType: 'current'
         downloadType: 'single'
-        artifactName: 'drop'
+        artifactName: '$(artifactName)'
         downloadPath: '$(System.ArtifactsDirectory)'
     - task: AzureFunctionApp@1
       inputs:
         azureSubscription: 'prog8860-service-connection'
         appType: 'functionApp'
         appName: 'prog8860-lab4-app'
-        package: '$(System.ArtifactsDirectory)/build_output.zip'
+        package: '$(System.ArtifactsDirectory)/$(artifactName)/build_output.zip'

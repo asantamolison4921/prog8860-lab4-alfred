@@ -6,7 +6,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  solution: 'Prog8860Lab4/Prog8860Lab4.sln'  # Path to your solution file
+  solution: 'Prog8860Lab4/Prog8860Lab4.sln'
 
 stages:
 - stage: Build
@@ -18,7 +18,7 @@ stages:
     - task: UseDotNet@2
       inputs:
         packageType: 'sdk'
-        version: '6.x'
+        version: '8.0.x'  # Ensure the .NET 8.0 SDK is installed
     - script: |
         dotnet build $(solution) --configuration $(buildConfiguration)
       displayName: 'Build Project'
@@ -30,6 +30,10 @@ stages:
   - job: Test
     displayName: 'Run Unit Tests'
     steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '8.0.x'  # Ensure the .NET 8.0 SDK is installed
     - script: |
         dotnet test $(solution) --configuration $(buildConfiguration)
       displayName: 'Run Tests'
@@ -41,6 +45,10 @@ stages:
   - job: Deploy
     displayName: 'Deploy to Azure'
     steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '8.0.x'
     - task: AzureFunctionApp@1
       inputs:
         azureSubscription: 'prog8860-service-connection'

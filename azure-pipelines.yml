@@ -18,10 +18,15 @@ stages:
     - task: UseDotNet@2
       inputs:
         packageType: 'sdk'
-        version: '8.0.x'  # Ensure the .NET 8.0 SDK is installed
+        version: '8.0.x'
     - script: |
         dotnet build $(solution) --configuration $(buildConfiguration)
       displayName: 'Build Project'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        artifactName: 'drop'
+        publishLocation: 'Container'
 
 - stage: Test
   displayName: 'Test Stage'
@@ -33,7 +38,7 @@ stages:
     - task: UseDotNet@2
       inputs:
         packageType: 'sdk'
-        version: '8.0.x'  # Ensure the .NET 8.0 SDK is installed
+        version: '8.0.x'
     - script: |
         dotnet test $(solution) --configuration $(buildConfiguration)
       displayName: 'Run Tests'
@@ -49,9 +54,15 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '8.0.x'
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'
     - task: AzureFunctionApp@1
       inputs:
         azureSubscription: 'prog8860-service-connection'
         appType: 'functionApp'
         appName: 'prog8860-lab4-app'
-        package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        package: '$(System.ArtifactsDirectory)/**/*.zip'

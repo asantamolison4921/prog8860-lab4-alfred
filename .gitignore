@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Prog8860Lab4/.vs/Prog8860Lab4
+/Prog8860Lab4/Prog8860Lab4/obj
+/Prog8860Lab4/Prog8860Lab4.Tests/bin/Debug/net8.0
+/Prog8860Lab4/Prog8860Lab4.Tests/obj
+/Prog8860Lab4/Prog8860Lab4/Prog8860Lab4.csproj
+/Prog8860Lab4/Prog8860Lab4.Tests/Prog8860Lab4.Tests.csproj
+/Prog8860Lab4/Prog8860Lab4.sln

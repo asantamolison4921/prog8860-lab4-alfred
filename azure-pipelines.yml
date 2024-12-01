@@ -69,9 +69,10 @@ stages:
         downloadType: 'single'
         artifactName: '$(artifactName)'
         downloadPath: '$(System.ArtifactsDirectory)'
-    - task: AzureFunctionApp@1
-      inputs:
-        azureSubscription: 'prog8860-service-connection'
-        appType: 'functionApp'
-        appName: 'prog8860-lab4-app'
-        package: '$(System.ArtifactsDirectory)/$(artifactName)/build_output.zip'
+    - script: |
+        if [ -f "$(System.ArtifactsDirectory)/$(artifactName)/build_output.zip" ]; then
+          echo "The file build_output.zip exists in the directory."
+        else
+          echo "The file build_output.zip does not exist in the directory."
+        fi
+      displayName: 'Check if build_output.zip exists'

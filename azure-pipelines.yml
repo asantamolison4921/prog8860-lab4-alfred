@@ -20,7 +20,7 @@ stages:
         packageType: 'sdk'
         version: '8.0.x'
     - script: |
-        dotnet build $(solution) --configuration $(buildConfiguration)
+        dotnet build $(solution) --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
       displayName: 'Build Project'
     - task: PublishBuildArtifacts@1
       inputs:

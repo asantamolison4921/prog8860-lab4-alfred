@@ -22,9 +22,16 @@ stages:
     - script: |
         dotnet build $(solution) --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
       displayName: 'Build Project'
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/build_output.zip'
+        replaceExistingArchive: true
     - task: PublishBuildArtifacts@1
       inputs:
-        pathToPublish: '$(Build.ArtifactStagingDirectory)'
+        pathToPublish: '$(Build.ArtifactStagingDirectory)/build_output.zip'
         artifactName: 'drop'
         publishLocation: 'Container'
 
@@ -65,4 +72,4 @@ stages:
         azureSubscription: 'prog8860-service-connection'
         appType: 'functionApp'
         appName: 'prog8860-lab4-app'
-        package: '$(System.ArtifactsDirectory)/**/*.zip'
+        package: '$(System.ArtifactsDirectory)/build_output.zip'

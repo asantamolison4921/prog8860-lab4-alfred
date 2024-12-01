@@ -6,7 +6,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  solution: '**/Prog8860Lab4.sln'  # Path to your solution file
+  solution: 'Prog8860Lab4/Prog8860Lab4.sln'  # Path to your solution file
 
 stages:
 - stage: Build

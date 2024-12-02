@@ -21,6 +21,9 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '8.0.x'
+    - script: |
+        dotnet --list-sdks
+      displayName: 'List installed .NET SDKs'
     - task: NuGetCommand@2
       inputs:
         command: 'restore'

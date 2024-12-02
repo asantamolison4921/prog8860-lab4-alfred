@@ -22,10 +22,6 @@ stages:
         dotnet build --configuration $(buildConfiguration)
       displayName: 'Build project'
 
-    - script: |
-        dotnet test --configuration $(buildConfiguration)
-      displayName: 'Run tests'
-
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)/prog8860-lab4-app/bin/$(buildConfiguration)/net8.0'
@@ -39,7 +35,21 @@ stages:
       artifact: drop
       displayName: 'Publish Artifact: drop'
 
+- stage: Test
+  dependsOn: Build
+  jobs:
+  - job: Test
+    steps:
+    - download: current
+      artifact: drop
+      displayName: 'Download Artifact'
+
+    - script: |
+        dotnet test --configuration $(buildConfiguration)
+      displayName: 'Run tests'
+
 - stage: Deploy
+  dependsOn: Test
   jobs:
   - job: Deploy
     steps:

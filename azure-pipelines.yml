@@ -24,6 +24,9 @@ stages:
     - script: |
         dotnet --list-sdks
       displayName: 'List installed .NET SDKs'
+    - script: |
+        dotnet new -i Microsoft.Azure.Functions.Worker.Sdk
+      displayName: 'Install Microsoft.NET.Sdk.Functions'
     - task: NuGetCommand@2
       inputs:
         command: 'restore'

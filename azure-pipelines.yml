@@ -42,7 +42,6 @@ stages:
 - stage: Deploy
   jobs:
   - job: Deploy
-    dependsOn: Build
     steps:
     - download: current
       artifact: drop

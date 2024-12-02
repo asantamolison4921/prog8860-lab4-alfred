@@ -1,0 +1,57 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '8.x'
+      displayName: 'Install .NET SDK'
+
+    - script: |
+        dotnet build --configuration $(buildConfiguration)
+      displayName: 'Build project'
+
+    - script: |
+        dotnet test --configuration $(buildConfiguration)
+      displayName: 'Run tests'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/prog8860-lab4-app/bin/$(buildConfiguration)/net8.0'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+        replaceExistingArchive: true
+      displayName: 'Archive files'
+
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: drop
+      displayName: 'Publish Artifact: drop'
+
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    dependsOn: Build
+    steps:
+    - download: current
+      artifact: drop
+      displayName: 'Download Artifact'
+
+    - task: AzureFunctionApp@1
+      inputs:
+        azureSubscription: 'prog8860-service-connection'
+        appType: 'functionApp'
+        appName: 'prog8860-lab4-app'
+        package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+      displayName: 'Deploy Azure Function App'

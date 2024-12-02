@@ -21,6 +21,10 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '8.0.x'
+    - task: NuGetCommand@2
+      inputs:
+        command: 'restore'
+        restoreSolution: '$(solution)'
     - script: |
         dotnet build $(solution) --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
       displayName: 'Build Project'

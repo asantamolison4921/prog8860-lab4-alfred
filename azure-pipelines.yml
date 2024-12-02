@@ -70,9 +70,9 @@ stages:
         artifactName: '$(artifactName)'
         downloadPath: '$(System.ArtifactsDirectory)'
     - script: |
-        if [ -f "$(System.ArtifactsDirectory)/$(artifactName)/build_output.zip" ]; then
-          echo "The file build_output.zip exists in the directory."
-        else
-          echo "The file build_output.zip does not exist in the directory."
-        fi
+        if exist "$(System.ArtifactsDirectory)\$(artifactName)\build_output.zip" (
+          echo The file build_output.zip exists in the directory.
+        ) else (
+          echo The file build_output.zip does not exist in the directory.
+        )
       displayName: 'Check if build_output.zip exists'

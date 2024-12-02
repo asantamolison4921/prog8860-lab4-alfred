@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "prog8860_lab4_app": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7282",
+      "launchBrowser": false
+    }
+  }
+}
